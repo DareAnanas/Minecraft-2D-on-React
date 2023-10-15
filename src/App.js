@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import woodIcon from './img/wood-icon1.png';
 
 const EARTH = 1;
 const WATER = 2;
 const GRAVEL = 3;
 const SAND = 4;
+const LEAVES = 5;
+const TOP_LEAVES = 6;
 const CHEST = 7;
 const PLAYER = 8;
+const WOOD = 9;
 
 function Block({ color }) {
   return (
@@ -24,10 +28,11 @@ function renderBlocks(matrix) {
     [WATER]: 'blue',
     [GRAVEL]: 'dimgray',
     [SAND]: 'khaki',
-    5: 'forestgreen',
-    6: 'darkgreen',
+    [LEAVES]: 'forestgreen',
+    [TOP_LEAVES]: 'darkgreen',
     [CHEST]: 'saddlebrown',
     [PLAYER]: 'yellow',
+    [WOOD]: '#80461B'
   };
 
   let blocks = [];
@@ -97,6 +102,7 @@ export default function App() {
   let [playerX, setPlayerX] = useState(1);
 
   let [state, setState] = useState('Hello StackBlitz!');
+  let [wood, setWood] = useState(0);
 
   let [showDialog, setShowDialog] = useState(false);
 
@@ -113,12 +119,33 @@ export default function App() {
       setPlayerY(playerY + ver);
       setPlayerX(playerX + hor);
       setMatrix(newMatrix);
+      return;
     }
     if (matrix[playerY + ver][playerX + hor] == CHEST) {
       let newMatrix = [...matrix];
       newMatrix[playerY + ver][playerX + hor] = EARTH;
       setMatrix(newMatrix);
       setShowDialog(true);
+      return;
+    }
+    if (matrix[playerY + ver][playerX + hor] == LEAVES) {
+      let newMatrix = [...matrix];
+      newMatrix[playerY + ver][playerX + hor] = EARTH;
+      setMatrix(newMatrix);
+      return;
+    }
+    if (matrix[playerY + ver][playerX + hor] == TOP_LEAVES) {
+      let newMatrix = [...matrix];
+      newMatrix[playerY + ver][playerX + hor] = WOOD;
+      setMatrix(newMatrix);
+      return;
+    }
+    if (matrix[playerY + ver][playerX + hor] == WOOD) {
+      let newMatrix = [...matrix];
+      newMatrix[playerY + ver][playerX + hor] = EARTH;
+      setMatrix(newMatrix);
+      setWood(wood + 1);
+      return;
     }
   };
 
@@ -152,7 +179,7 @@ export default function App() {
       </div>
       <input type="text" id="one" onKeyPress={(e) => handler(e)} />
       <h1>{state}</h1>
-      <p>Start editing to see some magic happen :)</p>
+      <h2><img src={woodIcon} title='Wood' style={{height: '32px'}} /> : {wood}</h2>
     </div>
   );
 }
